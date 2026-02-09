@@ -1,0 +1,160 @@
+﻿<Window x:Class="KisaSchoolMangement.Views.Student.StudentView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Students" Height="720" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Segoe UI">
+    <Grid Margin="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header / Stats -->
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Stretch">
+            <TextBlock Text="Students" FontSize="22" FontWeight="Bold" VerticalAlignment="Center"/>
+            <TextBlock Text="  |  Total: " Margin="12,0,0,0" VerticalAlignment="Center"/>
+            <TextBlock x:Name="txtTotalStudents" Text="0" FontSize="16" FontWeight="SemiBold" VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Filters Row -->
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Margin="0,12,0,12" VerticalAlignment="Center" HorizontalAlignment="Stretch">
+            <!-- Search with Watermark -->
+            <Grid Width="280" Height="40" Margin="0,0,12,0">
+                <TextBox x:Name="txtSearch" VerticalContentAlignment="Center"
+                         Style="{StaticResource GlobalTextBoxStyle}"
+                         TextChanged="txtSearch_TextChanged"/>
+                <TextBlock x:Name="txtSearchWatermark" Text="Search..."
+                          VerticalAlignment="Center" Margin="12,0,0,0" 
+                          Foreground="#A0A0A0" IsHitTestVisible="False">
+                    <TextBlock.Style>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Visibility" Value="Visible"/>
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding Text, ElementName=txtSearch}" Value="">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=txtSearch}" Value="{x:Null}">
+                                    <Setter Property="Visibility" Value="Visible"/>
+                                </DataTrigger>
+                                <DataTrigger Binding="{Binding Text, ElementName=txtSearch}">
+                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBlock.Style>
+                </TextBlock>
+            </Grid>
+
+            <ComboBox x:Name="cmbSearchField" Width="160" Height="34" Margin="0,0,8,0" SelectedIndex="0">
+                <ComboBoxItem Content="All Fields" />
+                <ComboBoxItem Content="Name" />
+                <ComboBoxItem Content="GR No" />
+                <ComboBoxItem Content="Class" />
+                <ComboBoxItem Content="Age" />
+                <ComboBoxItem Content="Father Name" />
+                <ComboBoxItem Content="Guardian Name" />
+            </ComboBox>
+
+            <!-- Simple Button Style instead of OutlineButtonStyle -->
+            <Button Content="Search" Width="90" Height="40" Margin="0,0,12,0" Click="btnSearch_Click"
+                    Style="{StaticResource PrimaryButtonStyle}"/>
+
+            <!-- Date pickers -->
+            <TextBlock Text="From:" VerticalAlignment="Center" Margin="12,0,6,0"/>
+            <DatePicker x:Name="dpFromDate" Width="140" Margin="0,0,8,0"/>
+            <TextBlock Text="To:" VerticalAlignment="Center" Margin="6,0,6,0"/>
+            <DatePicker x:Name="dpToDate" Width="140" Margin="0,0,8,0"/>
+
+            <Button Content="Apply Date" Width="100" Height="34" Margin="0,0,8,0" Click="btnApplyDate_Click"
+                    Background="#f0f0f0" BorderBrush="#cccccc" BorderThickness="1"/>
+
+            <!-- Utility Buttons -->
+            <Button Content="Import" Width="80" Height="34" Margin="0,0,8,0" Click="btnImportExcel_Click"
+                    Background="#f0f0f0" BorderBrush="#cccccc" BorderThickness="1"/>
+            <Button Content="Refresh" Width="80" Height="34" Margin="0,0,8,0" Click="btnRefresh_Click"
+                    Background="#f0f0f0" BorderBrush="#cccccc" BorderThickness="1"/>
+            <Button Content="Add Student" Width="140" Height="40" Click="btnAdd_Click"
+                    Style="{StaticResource PrimaryButtonStyle}"/>
+        </StackPanel>
+
+        <!-- Data grid with Card-like styling -->
+        <Border Grid.Row="2" Margin="0,0,0,12" Style="{StaticResource GlobalCardStyle}" Padding="0">
+            <DataGrid x:Name="StudentDataGrid" AutoGenerateColumns="False" IsReadOnly="True"
+                      SelectionMode="Single" SelectionUnit="FullRow" BorderThickness="0"
+                      SelectionChanged="StudentDataGrid_SelectionChanged"
+                      GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#E1E5E9"
+                      RowHeaderWidth="0" Background="White">
+                
+                <DataGrid.Resources>
+                    <Style TargetType="DataGridColumnHeader">
+                        <Setter Property="Background" Value="#F8F9FA"/>
+                        <Setter Property="Foreground" Value="#636E72"/>
+                        <Setter Property="Padding" Value="10,12"/>
+                        <Setter Property="FontWeight" Value="SemiBold"/>
+                        <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                        <Setter Property="BorderBrush" Value="#E1E5E9"/>
+                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                    </Style>
+                    <Style TargetType="DataGridCell">
+                        <Setter Property="Padding" Value="10,8"/>
+                        <Setter Property="BorderThickness" Value="0"/>
+                        <Setter Property="Template">
+                            <Setter.Value>
+                                <ControlTemplate TargetType="DataGridCell">
+                                    <Border BorderThickness="0" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}">
+                                        <ContentPresenter VerticalAlignment="Center" />
+                                    </Border>
+                                </ControlTemplate>
+                            </Setter.Value>
+                        </Setter>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="#EBF5FF"/>
+                                <Setter Property="Foreground" Value="#2D3436"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </DataGrid.Resources>
+                
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="GR No" Binding="{Binding GrNo}" Width="80"/>
+                    <DataGridTextColumn Header="Name" Binding="{Binding StudentName}" Width="*"/>
+                    <DataGridTextColumn Header="Father Name" Binding="{Binding FatherName}" Width="*"/>
+                    <DataGridTextColumn Header="Gender" Binding="{Binding Gender}" Width="80"/>
+                    <DataGridTextColumn Header="Class" Binding="{Binding ClassName}" Width="80"/>
+                    <DataGridTextColumn Header="Section" Binding="{Binding SectionName}" Width="80"/>
+                    <DataGridTextColumn Header="DOB" Binding="{Binding DOB, StringFormat=dd/MM/yyyy}" Width="100"/>
+                    <DataGridTextColumn Header="Guardian" Binding="{Binding GuardianName}" Width="120"/>
+                    <DataGridTextColumn Header="Phone" Binding="{Binding GuardianPhone}" Width="120"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding ActiveStatus}" Width="80"/>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Footer / selected info + actions -->
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock x:Name="txtSelectedInfo" Grid.Column="0" VerticalAlignment="Center" Foreground="#555" 
+                       Text="No student selected - Select a student to edit or delete"/>
+
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="btnViewDetails" Content="View Details" Width="110" Margin="8,0" 
+                        Click="btnViewDetails_Click" IsEnabled="False"
+                        Style="{StaticResource OutlineButtonStyle}"/>
+                <Button x:Name="btnEdit" Content="Edit" Width="90" Margin="8,0" 
+                        Click="btnEdit_Click" IsEnabled="False"
+                        Style="{StaticResource PrimaryButtonStyle}"/>
+                <Button x:Name="btnDelete" Content="Delete" Width="90" Margin="8,0" 
+                        Click="btnDelete_Click" IsEnabled="False"
+                        Style="{StaticResource DangerButtonStyle}"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

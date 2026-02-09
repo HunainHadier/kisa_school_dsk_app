@@ -1,0 +1,429 @@
+﻿<Window x:Class="KisaSchoolMangement.Views.Dashboard.DashboardView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        mc:Ignorable="d"
+        Title="Kisa School Management System"
+        WindowState="Maximized"
+        WindowStartupLocation="CenterScreen"
+        Background="#F4F6F9"
+        Closing="Window_Closing"
+        FontFamily="Segoe UI">
+
+    <Window.Resources>
+        <!-- Colors -->
+        <Color x:Key="PrimaryColor">#4361EE</Color>
+        <Color x:Key="SecondaryColor">#3F37C9</Color>
+        <Color x:Key="AccentColor">#4CC9F0</Color>
+        <Color x:Key="SidebarBg">#1E1E2D</Color>
+        <Color x:Key="CardBg">#FFFFFF</Color>
+
+        <SolidColorBrush x:Key="PrimaryBrush" Color="{StaticResource PrimaryColor}"/>
+        <SolidColorBrush x:Key="SidebarBrush" Color="{StaticResource SidebarBg}"/>
+        <SolidColorBrush x:Key="TextPrimaryBrush" Color="#2b2b2b"/>
+        <SolidColorBrush x:Key="TextSecondaryBrush" Color="#757575"/>
+
+        <!-- Button Style -->
+        <Style TargetType="Button" x:Key="MenuButtonStyle">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="#A6A6A6"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="20,10"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                CornerRadius="5">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" 
+                                              VerticalAlignment="Center" 
+                                              Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="#2A2A40"/>
+                    <Setter Property="Foreground" Value="White"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <!-- Sidebar Expander Style -->
+        <Style TargetType="Expander">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Margin" Value="0,5,0,5"/>
+            <Setter Property="IsExpanded" Value="False"/>
+        </Style>
+        
+        <!-- Dashboard Card Style -->
+        <Style TargetType="Border" x:Key="CardStyle">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="15"/>
+            <Setter Property="Margin" Value="0,0,20,20"/>
+            <Setter Property="Padding" Value="20"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="15" ShadowDepth="2" Direction="270" Color="#E5E9F2" Opacity="0.5"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </Window.Resources>
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="260"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar -->
+        <Border Grid.Column="0" Background="{StaticResource SidebarBrush}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- Logo -->
+                    <RowDefinition Height="Auto"/> <!-- User Profile -->
+                    <RowDefinition Height="*"/>    <!-- Menu -->
+                    <RowDefinition Height="Auto"/> <!-- Footer -->
+                </Grid.RowDefinitions>
+
+                <!-- Logo Section -->
+                <Border Grid.Row="0" Padding="25" BorderBrush="#2A2A40" BorderThickness="0,0,0,1">
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                        <TextBlock Text="🏫" FontSize="24" VerticalAlignment="Center" />
+                        <StackPanel Margin="10,0,0,0" VerticalAlignment="Center">
+                            <TextBlock Text="KISA SCHOOL" 
+                                       FontSize="18" 
+                                       FontWeight="Bold" 
+                                       Foreground="White"/>
+                            <TextBlock Text="MANAGEMENT SYSTEM" 
+                                       FontSize="10" 
+                                       Foreground="#6C757D" 
+                                       FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Border>
+
+                <!-- User Profile Summary (Compact) -->
+                <Border Grid.Row="1" Padding="20,20,20,10">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Border Width="45" Height="45" CornerRadius="25" Background="#363645" Margin="0,0,10,0">
+                            <TextBlock Text="👤" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="20"/>
+                        </Border>
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock x:Name="txtUserName" 
+                                       Text="Admin User" 
+                                       FontSize="14" 
+                                       FontWeight="SemiBold" 
+                                       Foreground="White"/>
+                            <TextBlock x:Name="txtUserRole" 
+                                       Text="Administrator" 
+                                       FontSize="12" 
+                                       Foreground="#7E8299"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Navigation Menu -->
+                <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" Margin="0,10,0,0">
+                    <StackPanel Margin="10,0">
+                        
+                        <!-- Dashboard Link -->
+                        <Button Style="{StaticResource MenuButtonStyle}" Content="📊  Dashboard" Background="#2A2A40" Foreground="White" FontWeight="SemiBold"/>
+
+                        <!-- Sections -->
+                        <TextBlock Text="MANAGEMENT" FontSize="11" Foreground="#5E6278" FontWeight="Bold" Margin="15,20,0,10"/>
+
+                        <!-- User Management -->
+                        <Expander Header="👥  User Management" Style="{StaticResource {x:Type Expander}}">
+                            <StackPanel Margin="20,5,0,5">
+                                <Button Content="➕  Add New User" Style="{StaticResource MenuButtonStyle}" Click="AddUser_Click"/>
+                                <Button Content="📋  Manage Users" Style="{StaticResource MenuButtonStyle}" Click="ManageUsers_Click"/>
+                                <Button Content="👑  User Roles" Style="{StaticResource MenuButtonStyle}" Click="ManageRoles_Click"/>
+                                <Button Content="🔐  Permissions" Style="{StaticResource MenuButtonStyle}" Click="ManagePermissions_Click"/>
+                            </StackPanel>
+                        </Expander>
+
+                        <!-- Student Management -->
+                        <Expander Header="👨‍🎓  Student Management" Style="{StaticResource {x:Type Expander}}">
+                            <StackPanel Margin="20,5,0,5">
+                                <Button Content="➕  Add Student" Style="{StaticResource MenuButtonStyle}" Click="AddStudent_Click"/>
+                                <Button Content="📋  Manage Students" Style="{StaticResource MenuButtonStyle}" Click="ManageStudents_Click"/>
+                            </StackPanel>
+                        </Expander>
+
+                        <!-- Teacher Management -->
+                        <Expander Header="👨‍🏫  Teacher Management" Style="{StaticResource {x:Type Expander}}">
+                            <StackPanel Margin="20,5,0,5">
+                                <Button Content="📋  Manage Teachers" Style="{StaticResource MenuButtonStyle}" Click="Teachermanage_Click"/>
+                            </StackPanel>
+                        </Expander>
+
+                        <!-- Academics Group -->
+                        <TextBlock Text="ACADEMICS" FontSize="11" Foreground="#5E6278" FontWeight="Bold" Margin="15,20,0,10"/>
+
+                        <!-- Class Management -->
+                        <Expander Header="🏫  Class Management" Style="{StaticResource {x:Type Expander}}">
+                            <StackPanel Margin="20,5,0,5">
+                                <Button Content="➕  Add Class" Style="{StaticResource MenuButtonStyle}" Click="AddClass_Click"/>
+                                <Button Content="📚  Manage Classes" Style="{StaticResource MenuButtonStyle}" Click="ManageClasses_Click"/>
+                            </StackPanel>
+                        </Expander>
+
+                        <!-- Section Management -->
+                        <Expander Header="📖  Section Management" Style="{StaticResource {x:Type Expander}}">
+                            <StackPanel Margin="20,5,0,5">
+                                <Button Content="➕  Add Section" Style="{StaticResource MenuButtonStyle}" Click="AddSection_Click"/>
+                                <Button Content="📋  Manage Sections" Style="{StaticResource MenuButtonStyle}" Click="ManageSections_Click"/>
+                            </StackPanel>
+                        </Expander>
+
+                        <!-- Exam Management -->
+                        <Expander Header="📝  Exam Management" Style="{StaticResource {x:Type Expander}}">
+                            <StackPanel Margin="20,5,0,5">
+                                <Button Content="➕  Add Exam" Style="{StaticResource MenuButtonStyle}" Click="AddExam_Click"/>
+                                <Button Content="📊  Manage Exams" Style="{StaticResource MenuButtonStyle}" Click="ManageExams_Click"/>
+                                <Button Content="📚  Exam Subjects" Style="{StaticResource MenuButtonStyle}" Click="ManageExamSubjects_Click"/>
+                            </StackPanel>
+                        </Expander>
+
+                        <!-- Finance & Others -->
+                        <TextBlock Text="FINANCE &amp; OTHERS" FontSize="11" Foreground="#5E6278" FontWeight="Bold" Margin="15,20,0,10"/>
+
+                        <!-- Donor Management -->
+                        <Expander Header="🤝  Donor Management" Style="{StaticResource {x:Type Expander}}">
+                            <StackPanel Margin="20,5,0,5">
+                                <Button Content="➕  Add Donor" Style="{StaticResource MenuButtonStyle}" Click="AddDonor_Click"/>
+                                <Button Content="💰  Manage Donors" Style="{StaticResource MenuButtonStyle}" Click="ManageDonors_Click"/>
+                                <Button Content="🎓  Students w/ Donors" Style="{StaticResource MenuButtonStyle}" Click="ViewDonerwithStudents_Click"/>
+                            </StackPanel>
+                        </Expander>
+
+                        <!-- Quick Actions -->
+                        <Expander Header="⚡  Quick Actions" Style="{StaticResource {x:Type Expander}}">
+                            <StackPanel Margin="20,5,0,5">
+                                <Button Content="💰  Collect Fee" Style="{StaticResource MenuButtonStyle}" Click="CollectFee_Click"/>
+                                <Button Content="📅  Mark Attendance" Style="{StaticResource MenuButtonStyle}" Click="MarkAttendance_Click"/>
+                                <Button Content="📝  Enter Marks" Style="{StaticResource MenuButtonStyle}" Click="EnterMarks_Click"/>
+                                <Button Content="📄  Assignments" Style="{StaticResource MenuButtonStyle}" Click="ManageAssignments_Click"/>
+                            </StackPanel>
+                        </Expander>
+
+                    </StackPanel>
+                </ScrollViewer>
+
+                <!-- Sidebar Footer -->
+                <Border Grid.Row="3" Padding="20" Background="#161621" BorderBrush="#2A2A40" BorderThickness="0,1,0,0">
+                    <Button Click="btnLogout_Click" Background="Transparent" BorderThickness="0" Cursor="Hand">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🚪" Foreground="#FF5252" FontSize="16" Margin="0,0,10,0"/>
+                            <TextBlock Text="Logout System" Foreground="#FF5252" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Border>
+            </Grid>
+        </Border>
+
+        <!-- Main Content Area -->
+        <Border Grid.Column="1" Background="#F4F6F9">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- Top Header -->
+                    <RowDefinition Height="*"/>    <!-- Content Scroll -->
+                </Grid.RowDefinitions>
+
+                <!-- Top Header Bar -->
+                <Border Grid.Row="0" Background="White" Padding="25,15" Height="70" VerticalAlignment="Top">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="10" ShadowDepth="1" Direction="270" Color="#E5E9F2" Opacity="0.5"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <!-- Page Title -->
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Overview Dashboard" FontSize="20" FontWeight="Bold" Foreground="#3F4254"/>
+                            <TextBlock Text="Welcome back to your dashboard." FontSize="12" Foreground="#B5B5C3" Margin="0,2,0,0"/>
+                        </StackPanel>
+
+                        <!-- Date Time Display -->
+                        <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                             <Border Background="#F3F6F9" CornerRadius="8" Padding="15,8" Margin="0,0,10,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="📅 " FontSize="14"/>
+                                    <TextBlock x:Name="txtCurrentDate" Text="Jan 01, 2024" FontSize="13" FontWeight="SemiBold" Foreground="#7E8299" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                            <Border Background="#FFF4DE" CornerRadius="8" Padding="15,8">
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="⏰ " FontSize="14"/>
+                                    <TextBlock x:Name="txtCurrentTime" Text="12:00 PM" FontSize="13" FontWeight="Bold" Foreground="#FFA800" VerticalAlignment="Center"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <!-- Scrollable Content -->
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="25">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/> <!-- Statistics Cards -->
+                            <RowDefinition Height="*"/>    <!-- Widget Area -->
+                        </Grid.RowDefinitions>
+
+                        <!-- Statistics Section -->
+                        <ItemsControl Grid.Row="0" ItemsSource="{Binding Statistics}">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <WrapPanel Orientation="Horizontal"/>
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <!-- Using a Grid to overlay content properly -->
+                                    <Border Width="240" Height="140" CornerRadius="15" Margin="0,0,25,25">
+                                        <Border.Background>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                <GradientStop Color="{Binding Color}" Offset="0.0" />
+                                                <GradientStop Color="#FFFFFF" Offset="2.5" /> <!-- Slight fade hack or just use solid color with gradient effect -->
+                                            </LinearGradientBrush>
+                                        </Border.Background>
+                                        <Border.Effect>
+                                             <DropShadowEffect BlurRadius="15" ShadowDepth="4" Direction="270" Color="{Binding Color}" Opacity="0.4"/>
+                                        </Border.Effect>
+                                        
+                                        <Grid>
+                                            <!-- Color fix: The binding color is a solid color, so LinearGradientBrush might fail if not handled well. 
+                                                 Actually, let's keep it simple and just use the binding color as background for now to avoid complexity if `Color` is not a gradient friendly type.
+                                                 But wait, I can use SolidColorBrush if I bind Background.
+                                                 Let's assume Binding Color is a System.Windows.Media.Color or Brush.
+                                                 If it is a brush, I can just use Background="{Binding Color}". 
+                                                 Let's check the ViewModel.
+                                            -->
+                                            <Border CornerRadius="15" Background="{Binding Color}" Opacity="0.9"/>
+
+                                            <!-- Decorative Circle for modern look -->
+                                            <Ellipse Width="100" Height="100" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,-20,-20,0" Fill="White" Opacity="0.2"/>
+                                            
+                                            <StackPanel Margin="20" VerticalAlignment="Center">
+                                                <TextBlock Text="{Binding Count}" FontSize="36" FontWeight="Bold" Foreground="White" />
+                                                <TextBlock Text="{Binding Title}" FontSize="16" FontWeight="SemiBold" Foreground="White" Opacity="0.9" Margin="0,5,0,0"/>
+                                                <TextBlock Text="{Binding Description}" FontSize="12" Foreground="White" Opacity="0.7" Margin="0,2,0,0"/>
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+
+                        <!-- Content Grid -->
+                        <Grid Grid.Row="1">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="2*"/> <!-- Recent Activities -->
+                                <ColumnDefinition Width="25"/> <!-- Spacer -->
+                                <ColumnDefinition Width="1*"/> <!-- Overview -->
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Recent Activities Panel -->
+                            <Border Grid.Column="0" Style="{StaticResource CardStyle}">
+                                <StackPanel>
+                                    <Grid Margin="0,0,0,20">
+                                        <TextBlock Text="Recent Activities" FontSize="18" FontWeight="Bold" Foreground="#3F4254"/>
+                                        <Button Content="View All" HorizontalAlignment="Right" Foreground="{StaticResource PrimaryBrush}" Background="Transparent" BorderThickness="0" Cursor="Hand"/>
+                                    </Grid>
+
+                                    <ItemsControl ItemsSource="{Binding RecentActivities}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate>
+                                                <Grid Margin="0,0,0,15">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                        <ColumnDefinition Width="*"/>
+                                                        <ColumnDefinition Width="Auto"/>
+                                                    </Grid.ColumnDefinitions>
+                                                    
+                                                    <!-- Timeline Dot -->
+                                                    <Border Grid.Column="0" Width="40" Height="40" CornerRadius="20" Background="#F3F6F9" Margin="0,0,15,0">
+                                                        <TextBlock Text="⚡" HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="14"/>
+                                                    </Border>
+                                                    
+                                                    <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                                                        <TextBlock Text="{Binding Activity}" FontSize="14" FontWeight="SemiBold" Foreground="#464E5F" TextTrimming="CharacterEllipsis"/>
+                                                    </StackPanel>
+                                                    
+                                                    <TextBlock Grid.Column="2" Text="{Binding Time}" FontSize="12" Foreground="#B5B5C3" VerticalAlignment="Center"/>
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- System Overview Panel -->
+                            <Border Grid.Column="2" Style="{StaticResource CardStyle}">
+                                <StackPanel>
+                                    <TextBlock Text="System Stats" FontSize="18" FontWeight="Bold" Foreground="#3F4254" Margin="0,0,0,20"/>
+
+                                    <!-- Stat Item 1 -->
+                                    <Border Background="#F8F5FF" CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                                        <Grid>
+                                            <StackPanel>
+                                                <TextBlock Text="Total Users" FontSize="13" Foreground="#7E8299"/>
+                                                <TextBlock Text="{Binding TotalUsers}" FontSize="20" FontWeight="Bold" Foreground="#8950FC" Margin="0,5,0,0"/>
+                                            </StackPanel>
+                                            <Button HorizontalAlignment="Right" VerticalAlignment="Top" Padding="5" Background="Transparent" BorderThickness="0" Click="QuickManageUsers_Click">
+                                                <TextBlock Text="↗" Foreground="#8950FC" FontSize="16"/>
+                                            </Button>
+                                        </Grid>
+                                    </Border>
+
+                                    <!-- Stat Item 2 -->
+                                    <Border Background="#E1F0FF" CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                                        <StackPanel>
+                                            <TextBlock Text="Active Students" FontSize="13" Foreground="#7E8299"/>
+                                            <TextBlock Text="{Binding TotalStudents}" FontSize="20" FontWeight="Bold" Foreground="#3699FF" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                    <!-- Stat Item 3 -->
+                                    <Border Background="#FFF4DE" CornerRadius="10" Padding="15" Margin="0,0,0,15">
+                                        <StackPanel>
+                                            <TextBlock Text="Total Donors" FontSize="13" Foreground="#7E8299"/>
+                                            <TextBlock Text="{Binding TotalDonors}" FontSize="20" FontWeight="Bold" Foreground="#FFA800" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+                                    
+                                    <!-- Stat Item 4 -->
+                                    <Border Background="#FFE2E5" CornerRadius="10" Padding="15">
+                                        <StackPanel>
+                                            <TextBlock Text="Teaching Staff" FontSize="13" Foreground="#7E8299"/>
+                                            <TextBlock Text="{Binding TotalTeachers}" FontSize="20" FontWeight="Bold" Foreground="#F64E60" Margin="0,5,0,0"/>
+                                        </StackPanel>
+                                    </Border>
+
+                                </StackPanel>
+                            </Border>
+
+                        </Grid>
+                    </Grid>
+                </ScrollViewer>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
