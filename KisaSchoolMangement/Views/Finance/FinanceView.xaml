@@ -1,0 +1,164 @@
+﻿<Window x:Class="KisaSchoolMangement.Views.Finance.FinanceView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="💰 Finance Management"
+        Height="800"
+        Width="1200"
+        WindowStartupLocation="CenterOwner"
+        Background="#f5f6fa"
+        WindowState="Maximized">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="White" CornerRadius="10" Padding="20" Margin="0,0,0,15"
+                BorderBrush="#e0e0e0" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Text="💰 Finance Management" FontSize="26" FontWeight="Bold" Foreground="#2c3e50"/>
+                <TextBlock Text="Collect fees, track payments, and review outstanding balances."
+                           FontSize="13" Foreground="#7f8c8d" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <!-- Summary Cards -->
+        <Grid Grid.Row="1" Margin="0,0,0,15">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Background="#E8F5E9" CornerRadius="10" Padding="15" Margin="0,0,15,0">
+                <StackPanel>
+                    <TextBlock Text="Total Assigned" Foreground="#2e7d32" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtTotalAssigned" Text="0" FontSize="20" FontWeight="Bold" Foreground="#1b5e20"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="1" Background="#E3F2FD" CornerRadius="10" Padding="15" Margin="0,0,15,0">
+                <StackPanel>
+                    <TextBlock Text="Total Collected" Foreground="#1565c0" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtTotalCollected" Text="0" FontSize="20" FontWeight="Bold" Foreground="#0d47a1"/>
+                </StackPanel>
+            </Border>
+            <Border Grid.Column="2" Background="#FFF3E0" CornerRadius="10" Padding="15" Margin="0,0,15,0">
+                <StackPanel>
+                    <TextBlock Text="Total Pending" Foreground="#ef6c00" FontWeight="Bold"/>
+                    <TextBlock x:Name="txtTotalPending" Text="0" FontSize="20" FontWeight="Bold" Foreground="#e65100"/>
+                </StackPanel>
+            </Border>
+            <Button Grid.Column="3" Content="🔄 Refresh"
+                    Click="BtnRefresh_Click"
+                    Width="120" Height="40"
+                    Background="#95a5a6"
+                    Foreground="White"
+                    FontWeight="SemiBold"/>
+        </Grid>
+
+        <!-- Main Content -->
+        <TabControl Grid.Row="2">
+            <TabItem Header="📥 Collect Fees">
+                <Grid Margin="10">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="25"/>
+                        <ColumnDefinition Width="1*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Border Grid.Column="0" Background="White" CornerRadius="10" Padding="0"
+                            BorderBrush="#e0e0e0" BorderThickness="1">
+                        <StackPanel>
+                            <Border Background="#34495e" CornerRadius="10,10,0,0" Padding="15">
+                                <TextBlock Text="Outstanding Fee Assignments" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                            </Border>
+                            <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500">
+                                <DataGrid x:Name="dgAssignments"
+                                          AutoGenerateColumns="False"
+                                          IsReadOnly="True"
+                                          SelectionChanged="DgAssignments_SelectionChanged">
+                                    <DataGrid.Columns>
+                                        <DataGridTextColumn Header="Student" Binding="{Binding StudentName}" Width="170"/>
+                                        <DataGridTextColumn Header="GR No" Binding="{Binding GrNo}" Width="80"/>
+                                        <DataGridTextColumn Header="Class" Binding="{Binding ClassName}" Width="120"/>
+                                        <DataGridTextColumn Header="Section" Binding="{Binding SectionName}" Width="120"/>
+                                        <DataGridTextColumn Header="Assigned" Binding="{Binding AssignedAmount}" Width="100"/>
+                                        <DataGridTextColumn Header="Paid" Binding="{Binding PaidAmount}" Width="100"/>
+                                        <DataGridTextColumn Header="Balance" Binding="{Binding Balance}" Width="100"/>
+                                        <DataGridTextColumn Header="Due" Binding="{Binding DueDateDisplay}" Width="100"/>
+                                        <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
+                                    </DataGrid.Columns>
+                                </DataGrid>
+                            </ScrollViewer>
+                        </StackPanel>
+                    </Border>
+
+                    <Border Grid.Column="2" Background="White" CornerRadius="10" Padding="20"
+                            BorderBrush="#e0e0e0" BorderThickness="1">
+                        <StackPanel>
+                            <TextBlock Text="Collect Payment" FontSize="16" FontWeight="Bold" Foreground="#2c3e50" Margin="0,0,0,15"/>
+
+                            <TextBlock Text="Selected Student" FontWeight="SemiBold"/>
+                            <TextBlock x:Name="txtSelectedStudent" Text="No selection" Margin="0,4,0,10"/>
+
+                            <TextBlock Text="Amount" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtPaymentAmount" Height="30" Margin="0,4,0,10"/>
+
+                            <TextBlock Text="Payment Method" FontWeight="SemiBold"/>
+                            <ComboBox x:Name="cmbPaymentMethod" Height="30" Margin="0,4,0,10">
+                                <ComboBoxItem Content="Cash" IsSelected="True"/>
+                                <ComboBoxItem Content="Bank Transfer"/>
+                                <ComboBoxItem Content="Mobile Wallet"/>
+                                <ComboBoxItem Content="Cheque"/>
+                            </ComboBox>
+
+                            <TextBlock Text="Transaction Reference" FontWeight="SemiBold"/>
+                            <TextBox x:Name="txtTransactionRef" Height="30" Margin="0,4,0,10"/>
+
+                            <TextBlock Text="Payment Date" FontWeight="SemiBold"/>
+                            <DatePicker x:Name="dpPaymentDate" Margin="0,4,0,20"/>
+
+                            <Button Content="✅ Collect Payment"
+                                    Click="BtnCollectPayment_Click"
+                                    Height="40"
+                                    Background="#27ae60"
+                                    Foreground="White"
+                                    FontWeight="SemiBold"/>
+                        </StackPanel>
+                    </Border>
+                </Grid>
+            </TabItem>
+
+            <TabItem Header="🧾 Payment History">
+                <Border Background="White" CornerRadius="10" Padding="0"
+                        BorderBrush="#e0e0e0" BorderThickness="1" Margin="10">
+                    <StackPanel>
+                        <Border Background="#34495e" CornerRadius="10,10,0,0" Padding="15">
+                            <TextBlock Text="Fee Payments" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+                        <ScrollViewer VerticalScrollBarVisibility="Auto" Height="600">
+                            <DataGrid x:Name="dgPayments"
+                                      AutoGenerateColumns="False"
+                                      IsReadOnly="True">
+                                <DataGrid.Columns>
+                                    <DataGridTextColumn Header="Student" Binding="{Binding StudentName}" Width="180"/>
+                                    <DataGridTextColumn Header="GR No" Binding="{Binding GrNo}" Width="80"/>
+                                    <DataGridTextColumn Header="Class" Binding="{Binding ClassName}" Width="120"/>
+                                    <DataGridTextColumn Header="Section" Binding="{Binding SectionName}" Width="120"/>
+                                    <DataGridTextColumn Header="Amount" Binding="{Binding Amount}" Width="100"/>
+                                    <DataGridTextColumn Header="Method" Binding="{Binding PaymentMethod}" Width="120"/>
+                                    <DataGridTextColumn Header="Reference" Binding="{Binding TransactionRef}" Width="150"/>
+                                    <DataGridTextColumn Header="Date" Binding="{Binding PaymentDateDisplay}" Width="120"/>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </ScrollViewer>
+                    </StackPanel>
+                </Border>
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

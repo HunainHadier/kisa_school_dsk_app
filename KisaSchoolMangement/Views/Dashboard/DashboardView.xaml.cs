@@ -4,6 +4,7 @@ using KisaSchoolMangement.Views.Auth;
 using KisaSchoolMangement.Views.Class;
 using KisaSchoolMangement.Views.Donors;
 using KisaSchoolMangement.Views.Exams;
+using KisaSchoolMangement.Views.Finance;
 using KisaSchoolMangement.Views.Section;
 using KisaSchoolMangement.Views.Student;
 using KisaSchoolMangement.Views.Students;
@@ -199,9 +200,10 @@ namespace KisaSchoolMangement.Views.Dashboard
 
         private void ManageClasses_Click(object sender, RoutedEventArgs e)
         {
-            // You can create a ClassesView window later
-            MessageBox.Show("Classes management window will be implemented soon!", "Coming Soon",
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            var classesView = new ClassesManagementView();
+            classesView.Owner = this;
+            classesView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            classesView.Show();
         }
 
         private void AddSection_Click(object sender, RoutedEventArgs e)
@@ -214,9 +216,10 @@ namespace KisaSchoolMangement.Views.Dashboard
 
         private void ManageSections_Click(object sender, RoutedEventArgs e)
         {
-            // You can create a SectionsView window later
-            MessageBox.Show("Sections management window will be implemented soon!", "Coming Soon",
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            var sectionsView = new SectionsManagementView();
+            sectionsView.Owner = this;
+            sectionsView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            sectionsView.Show();
         }
 
         private void AddDonor_Click(object sender, RoutedEventArgs e)
@@ -242,8 +245,11 @@ namespace KisaSchoolMangement.Views.Dashboard
 
         private void CollectFee_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Fee collection feature will be implemented soon!", "Coming Soon",
-                MessageBoxButton.OK, MessageBoxImage.Information);
+            int currentUserId = _currentUser?.Id ?? 1;
+            var financeView = new FinanceView(currentUserId);
+            financeView.Owner = this;
+            financeView.WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            financeView.Show();
         }
 
         private void MarkAttendance_Click(object sender, RoutedEventArgs e)

@@ -1,0 +1,111 @@
+﻿<Window x:Class="KisaSchoolMangement.Views.Section.SectionsManagementView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="📖 Section Management"
+        Height="700"
+        Width="1100"
+        WindowStartupLocation="CenterOwner"
+        Background="#f5f6fa"
+        WindowState="Maximized">
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="White" CornerRadius="10" Padding="20" Margin="0,0,0,15"
+                BorderBrush="#e0e0e0" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Text="📖 Section Management" FontSize="26" FontWeight="Bold" Foreground="#2c3e50"/>
+                <TextBlock Text="Manage sections and capacities for each class." FontSize="13" Foreground="#7f8c8d" Margin="0,5,0,0"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="1" Background="White" CornerRadius="10" Padding="15" Margin="0,0,0,15"
+                BorderBrush="#e0e0e0" BorderThickness="1">
+            <StackPanel>
+                <TextBlock Text="🚀 Quick Actions" FontSize="16" FontWeight="Bold" Foreground="#2c3e50" Margin="0,0,0,10"/>
+                <StackPanel Orientation="Horizontal">
+                    <Button Content="➕ Add New Section"
+                            Click="BtnAddSection_Click"
+                            Width="160" Height="40"
+                            Background="#27ae60"
+                            Foreground="White"
+                            FontWeight="SemiBold"
+                            Margin="0,0,15,0"/>
+                    <Button Content="🔄 Refresh"
+                            Click="BtnRefresh_Click"
+                            Width="120" Height="40"
+                            Background="#95a5a6"
+                            Foreground="White"
+                            FontWeight="SemiBold"/>
+                </StackPanel>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="2" Background="White" CornerRadius="10" Padding="0"
+                BorderBrush="#e0e0e0" BorderThickness="1">
+            <StackPanel>
+                <Border Background="#34495e" CornerRadius="10,10,0,0" Padding="15">
+                    <Grid>
+                        <TextBlock Text="📋 All Sections" FontSize="16" FontWeight="Bold" Foreground="White"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                            <TextBox x:Name="txtSearchSection"
+                                     Width="220"
+                                     Height="30"
+                                     Padding="10,0"
+                                     TextChanged="TxtSearchSection_TextChanged"
+                                     ToolTip="Search sections by name or class"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" Height="500">
+                    <DataGrid x:Name="dgSections"
+                              AutoGenerateColumns="False"
+                              IsReadOnly="True"
+                              SelectionMode="Single"
+                              CanUserSortColumns="True">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="🏫 Class" Binding="{Binding ClassName}" Width="200"/>
+                            <DataGridTextColumn Header="📖 Section" Binding="{Binding Name}" Width="160"/>
+                            <DataGridTextColumn Header="👥 Capacity" Binding="{Binding Capacity}" Width="120"/>
+                            <DataGridTextColumn Header="📅 Created" Binding="{Binding CreatedAt}" Width="150"/>
+                            <DataGridTemplateColumn Header="⚡ Actions" Width="120">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                            <Button Content="✏️"
+                                                    Click="BtnEditSection_Click"
+                                                    Background="#3498db"
+                                                    Foreground="White"
+                                                    Width="30" Height="30"
+                                                    Margin="2"/>
+                                            <Button Content="🗑️"
+                                                    Click="BtnDeleteSection_Click"
+                                                    Background="#e74c3c"
+                                                    Foreground="White"
+                                                    Width="30" Height="30"
+                                                    Margin="2"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Row="3" Background="White" CornerRadius="10" Padding="12" Margin="0,15,0,0"
+                BorderBrush="#e0e0e0" BorderThickness="1">
+            <Grid>
+                <TextBlock x:Name="txtSectionsCount" Text="📊 Total Sections: 0" FontWeight="Bold" Foreground="#2c3e50"/>
+                <TextBlock x:Name="txtStatus" Text="Ready" HorizontalAlignment="Right" Foreground="#7f8c8d"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
